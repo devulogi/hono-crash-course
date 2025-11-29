@@ -1,0 +1,107 @@
+@startuml MiniBus API Use Case Diagram v2
+
+title MiniBus API - Use Case Diagram (Based on Activity Flow)
+
+left to right direction
+
+actor Customer
+actor Staff
+actor Admin
+
+rectangle "MiniBus API System" {
+  ' Customer use cases
+  usecase "Register Account" as UC1
+  usecase "Login" as UC2
+  usecase "Browse Available Trips" as UC3
+  usecase "Select Trip & Seat" as UC4
+  usecase "Create Booking" as UC5
+  usecase "Upload Attachment" as UC6
+  usecase "View My Bookings" as UC7
+  usecase "Cancel Booking" as UC8
+  
+  ' Staff/Admin use cases
+  usecase "Manage Trips" as UC9
+  usecase "Create New Trip" as UC10
+  usecase "Update Trip Details" as UC11
+  usecase "Delete Trip" as UC12
+  usecase "Manage Bookings" as UC13
+  usecase "View All Bookings" as UC14
+  usecase "Update Booking Status" as UC15
+  usecase "Handle Booking Issues" as UC16
+  usecase "Manage Files" as UC17
+  usecase "View User Files" as UC18
+  usecase "Delete Inappropriate Files" as UC19
+  
+  ' Admin only use cases
+  usecase "Manage Users" as UC20
+  usecase "Create Staff Account" as UC21
+  usecase "Update User Roles" as UC22
+  usecase "View All Users" as UC23
+}
+
+' Customer relationships
+Customer --> UC1
+Customer --> UC2
+Customer --> UC3
+Customer --> UC4
+Customer --> UC5
+Customer --> UC6
+Customer --> UC7
+Customer --> UC8
+
+' Staff relationships
+Staff --> UC2
+Staff --> UC9
+Staff --> UC10
+Staff --> UC11
+Staff --> UC12
+Staff --> UC13
+Staff --> UC14
+Staff --> UC15
+Staff --> UC16
+Staff --> UC17
+Staff --> UC18
+Staff --> UC19
+
+' Admin relationships (inherits all staff capabilities)
+Admin --> UC2
+Admin --> UC9
+Admin --> UC10
+Admin --> UC11
+Admin --> UC12
+Admin --> UC13
+Admin --> UC14
+Admin --> UC15
+Admin --> UC16
+Admin --> UC17
+Admin --> UC18
+Admin --> UC19
+Admin --> UC20
+Admin --> UC21
+Admin --> UC22
+Admin --> UC23
+
+' Dependencies
+UC4 ..> UC3 : <<requires>>
+UC5 ..> UC4 : <<requires>>
+UC5 ..> UC2 : <<requires>>
+UC6 ..> UC2 : <<requires>>
+UC7 ..> UC2 : <<requires>>
+UC8 ..> UC7 : <<requires>>
+UC10 ..> UC9 : <<includes>>
+UC11 ..> UC9 : <<includes>>
+UC12 ..> UC9 : <<includes>>
+UC14 ..> UC13 : <<includes>>
+UC15 ..> UC13 : <<includes>>
+UC16 ..> UC13 : <<includes>>
+UC18 ..> UC17 : <<includes>>
+UC19 ..> UC17 : <<includes>>
+UC21 ..> UC20 : <<includes>>
+UC22 ..> UC20 : <<includes>>
+UC23 ..> UC20 : <<includes>>
+
+' Extensions
+UC8 ..> UC7 : <<extends>>
+UC6 ..> UC5 : <<extends>>
+
+@enduml

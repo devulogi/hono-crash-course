@@ -1,0 +1,67 @@
+@startuml MiniBus API ER Diagram
+
+title MiniBus API - Entity Relationship Diagram
+
+!define table(x) class x << (T,#FFAAAA) >>
+!define primary_key(x) <u>x</u>
+!define foreign_key(x) <i>x</i>
+
+table(users) {
+  primary_key(id) : UUID
+  name : VARCHAR(255)
+  email : VARCHAR(255) UNIQUE
+  password_hash : VARCHAR(255)
+  role : ENUM('customer', 'staff', 'admin')
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+table(trips) {
+  primary_key(id) : UUID
+  route_name : VARCHAR(255)
+  origin : VARCHAR(255)
+  destination : VARCHAR(255)
+  departure_time : TIMESTAMP
+  arrival_time : TIMESTAMP
+  base_price : DECIMAL(10,2)
+  total_seats : INTEGER
+  foreign_key(created_by_user_id) : UUID
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+table(bookings) {
+  primary_key(id) : UUID
+  foreign_key(user_id) : UUID
+  foreign_key(trip_id) : UUID
+  seat_number : INTEGER
+  status : ENUM('pending', 'confirmed', 'cancelled')
+  note : TEXT
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+table(files) {
+  primary_key(id) : UUID
+  foreign_key(owner_user_id) : UUID
+  original_name : VARCHAR(255)
+  mime_type : VARCHAR(100)
+  size_bytes : BIGINT
+  storage_path : VARCHAR(500)
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+' Relationships
+users ||--o{ trips : "creates"
+users ||--o{ bookings : "makes"
+users ||--o{ files : "owns"
+trips ||--o{ bookings : "has"
+
+' Foreign key constraints
+trips::created_by_user_id }o--|| users::id
+bookings::user_id }o--|| users::id
+bookings::trip_id }o--|| trips::id
+files::owner_user_id }o--|| users::id
+
+@enduml

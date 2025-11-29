@@ -1,0 +1,84 @@
+@startuml MiniBus API Activity Diagram
+
+title MiniBus API - System Activity Flow
+
+|Customer|
+start
+:Register Account;
+note right: POST /auth/register
+:Login;
+note right: POST /auth/login
+:Browse Available Trips;
+note right: GET /trips
+
+if (Trip Found?) then (yes)
+  :Select Trip & Seat;
+  :Create Booking;
+  note right: POST /bookings
+  
+  if (Seat Available?) then (yes)
+    :Booking Confirmed;
+    
+    if (Upload File?) then (yes)
+      :Upload Attachment;
+      note right: POST /files
+    endif
+    
+    :View My Bookings;
+    note right: GET /bookings
+    
+    if (Cancel Booking?) then (yes)
+      :Cancel Booking;
+      note right: PATCH /bookings/:id
+    endif
+    
+  else (no)
+    :Seat Conflict Error;
+    stop
+  endif
+else (no)
+  :No Trips Available;
+  stop
+endif
+
+|Staff/Admin|
+:Login with Staff/Admin Role;
+note right: POST /auth/login
+
+fork
+  :Manage Trips;
+  :Create New Trip;
+  note right: POST /trips
+  :Update Trip Details;
+  note right: PATCH /trips/:id
+  :Delete Trip;
+  note right: DELETE /trips/:id
+fork again
+  :Manage Bookings;
+  :View All Bookings;
+  note right: GET /bookings
+  :Update Booking Status;
+  note right: PATCH /bookings/:id
+  :Handle Booking Issues;
+fork again
+  :Manage Files;
+  :View User Files;
+  note right: GET /files/:id
+  :Delete Inappropriate Files;
+  note right: DELETE /files/:id
+end fork
+
+|Admin Only|
+if (Admin Role?) then (yes)
+  :Manage Users;
+  :Create Staff Account;
+  note right: POST /users
+  :Update User Roles;
+  note right: PATCH /users/:id
+  :View All Users;
+  note right: GET /users
+endif
+
+stop
+
+@enduml

@@ -1,0 +1,73 @@
+@startuml MiniBus API Class Diagram
+
+title MiniBus API - Domain Model
+
+class User {
+  -id: UUID
+  -name: string
+  -email: string
+  -password_hash: string
+  -role: UserRole
+  -created_at: Date
+  +getId(): UUID
+  +getName(): string
+  +getEmail(): string
+  +setName(name: string): void
+  +setEmail(email: string): void
+  +toJSON(): UserType
+}
+
+class Trip {
+  -id: UUID
+  -route_name: string
+  -origin: string
+  -destination: string
+  -departure_time: Date
+  -arrival_time: Date
+  -base_price: number
+  -total_seats: number
+  -created_by_user_id: UUID
+  -created_at: Date
+}
+
+class Booking {
+  -id: UUID
+  -user_id: UUID
+  -trip_id: UUID
+  -seat_number: number
+  -status: BookingStatus
+  -note?: string
+  -created_at: Date
+}
+
+class File {
+  -id: UUID
+  -owner_user_id: UUID
+  -original_name: string
+  -mime_type: string
+  -size_bytes: number
+  -storage_path: string
+  -created_at: Date
+}
+
+enum UserRole {
+  CUSTOMER
+  STAFF
+  ADMIN
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+User ||--o{ Booking : creates
+User ||--o{ Trip : creates
+User ||--o{ File : owns
+Trip ||--o{ Booking : has
+
+User::role --> UserRole
+Booking::status --> BookingStatus
+
+@enduml

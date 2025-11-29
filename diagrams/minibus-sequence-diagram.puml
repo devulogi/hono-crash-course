@@ -1,0 +1,61 @@
+@startuml MiniBus API Sequence Diagram
+
+title MiniBus API - Customer Booking Flow
+
+actor Customer
+participant "Auth Controller" as Auth
+participant "Trips Controller" as Trips
+participant "Bookings Controller" as Bookings
+participant "Files Controller" as Files
+participant "Auth Middleware" as AuthMW
+participant "User Entity" as UserE
+participant "Trip Entity" as TripE
+participant "Booking Entity" as BookingE
+participant "Database" as DB
+participant "File Storage" as Storage
+
+== Registration & Login ==
+Customer -> Auth: POST /auth/register
+Auth -> UserE: Create user
+UserE -> DB: Save user
+Auth -> Customer: User created + JWT
+
+Customer -> Auth: POST /auth/login
+Auth -> DB: Validate credentials
+Auth -> Customer: JWT token
+
+== Browse & Book Trip ==
+Customer -> Trips: GET /trips?origin=A&destination=B
+Trips -> TripE: Find trips
+TripE -> DB: Query trips
+TripE -> Trips: Trip list
+Trips -> Customer: Available trips
+
+Customer -> Bookings: POST /bookings (with JWT)
+Bookings -> AuthMW: Validate JWT
+AuthMW -> Bookings: User authenticated
+Bookings -> TripE: Get trip details
+TripE -> DB: Find trip
+Bookings -> BookingE: Check seat availability
+BookingE -> DB: Query existing bookings
+BookingE -> Bookings: Seat available
+Bookings -> BookingE: Create booking
+BookingE -> DB: Save booking
+Bookings -> Customer: Booking confirmed
+
+== Optional File Upload ==
+Customer -> Files: POST /files (with JWT)
+Files -> AuthMW: Validate JWT
+Files -> Storage: Save file
+Files -> DB: Save file metadata
+Files -> Customer: File uploaded
+
+== View Bookings ==
+Customer -> Bookings: GET /bookings (with JWT)
+Bookings -> AuthMW: Validate JWT
+Bookings -> BookingE: Get user bookings
+BookingE -> DB: Query user's bookings
+BookingE -> Bookings: Booking list
+Bookings -> Customer: User's bookings
+
+@enduml

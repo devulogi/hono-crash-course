@@ -1,0 +1,127 @@
+@startuml MiniBus API DDD Clean Architecture
+
+title MiniBus API - DDD + Clean Architecture
+
+!define PRESENTATION #E1F5FE
+!define APPLICATION #F3E5F5
+!define DOMAIN #E8F5E8
+!define INFRASTRUCTURE #FFF3E0
+
+package "Presentation Layer" PRESENTATION {
+  package "Controllers" {
+    [Auth Controller]
+    [Users Controller] 
+    [Trips Controller]
+    [Bookings Controller]
+    [Files Controller]
+  }
+  
+  package "Middleware" {
+    [Auth Middleware]
+    [Validation Middleware]
+    [Error Handler]
+  }
+  
+  package "DTOs" {
+    [Request DTOs]
+    [Response DTOs]
+  }
+}
+
+package "Application Layer" APPLICATION {
+  package "Use Cases" {
+    [Register User Use Case]
+    [Login Use Case]
+    [Create Trip Use Case]
+    [Book Trip Use Case]
+    [Upload File Use Case]
+  }
+  
+  package "Services" {
+    [Auth Service]
+    [Booking Service]
+    [File Service]
+  }
+  
+  package "Ports (Interfaces)" {
+    [User Repository Port]
+    [Trip Repository Port]
+    [Booking Repository Port]
+    [File Storage Port]
+    [Email Service Port]
+  }
+}
+
+package "Domain Layer" DOMAIN {
+  package "Entities" {
+    [User Entity]
+    [Trip Entity]
+    [Booking Entity]
+    [File Entity]
+  }
+  
+  package "Value Objects" {
+    [Email VO]
+    [Price VO]
+    [Seat Number VO]
+  }
+  
+  package "Domain Services" {
+    [Booking Domain Service]
+    [Pricing Domain Service]
+  }
+  
+  package "Domain Events" {
+    [Booking Created Event]
+    [Trip Cancelled Event]
+  }
+  
+  package "Aggregates" {
+    [User Aggregate]
+    [Trip Aggregate]
+    [Booking Aggregate]
+  }
+}
+
+package "Infrastructure Layer" INFRASTRUCTURE {
+  package "Adapters" {
+    [PostgreSQL User Repository]
+    [PostgreSQL Trip Repository]
+    [PostgreSQL Booking Repository]
+    [Local File Storage]
+    [SMTP Email Service]
+  }
+  
+  package "External Services" {
+    [Database]
+    [File System]
+    [Email Provider]
+  }
+  
+  package "Configuration" {
+    [Database Config]
+    [JWT Config]
+    [Storage Config]
+  }
+}
+
+' Dependencies (Clean Architecture - inward dependencies only)
+[Controllers] ..> [Use Cases] : uses
+[Use Cases] ..> [Entities] : uses
+[Use Cases] ..> [Domain Services] : uses
+[Use Cases] ..> [Repository Port] : depends on
+
+[PostgreSQL User Repository] .up.|> [User Repository Port] : implements
+[PostgreSQL Trip Repository] .up.|> [Trip Repository Port] : implements
+[PostgreSQL Booking Repository] .up.|> [Booking Repository Port] : implements
+[Local File Storage] .up.|> [File Storage Port] : implements
+
+[Entities] ..> [Value Objects] : contains
+[Domain Services] ..> [Entities] : operates on
+[Aggregates] ..> [Entities] : contains
+
+' Cross-cutting concerns
+[Auth Middleware] ..> [Auth Service] : uses
+[Controllers] ..> [DTOs] : uses
+
+@enduml

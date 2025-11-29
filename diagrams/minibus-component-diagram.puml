@@ -1,0 +1,87 @@
+@startuml MiniBus API Component Diagram
+
+title MiniBus API - Component Architecture
+
+package "MiniBus API" {
+  package "Controllers" {
+    [Auth Controller] as auth
+    [Users Controller] as users
+    [Trips Controller] as trips
+    [Bookings Controller] as bookings
+    [Files Controller] as files
+  }
+  
+  package "Middleware" {
+    [Auth Middleware] as authMw
+    [Validation Middleware] as validation
+    [CORS Middleware] as cors
+  }
+  
+  package "Domain Entities" {
+    [User Entity] as userEntity
+    [Trip Entity] as tripEntity
+    [Booking Entity] as bookingEntity
+    [File Entity] as fileEntity
+  }
+  
+  package "Repositories" {
+    [User Repository] as userRepo
+    [Trip Repository] as tripRepo
+    [Booking Repository] as bookingRepo
+    [File Repository] as fileRepo
+  }
+}
+
+database "PostgreSQL" as db
+cloud "File Storage" as storage
+
+actor "Customer" as customer
+actor "Staff" as staff
+actor "Admin" as admin
+
+' User interactions
+customer --> auth : Login/Register
+customer --> trips : Browse trips
+customer --> bookings : Create/manage bookings
+customer --> files : Upload files
+
+staff --> auth : Login
+staff --> trips : Manage trips
+staff --> bookings : View all bookings
+
+admin --> users : Manage users
+admin --> auth : Login
+
+' Controller dependencies
+auth ..> authMw : uses
+users ..> authMw : uses
+trips ..> authMw : uses
+bookings ..> authMw : uses
+files ..> authMw : uses
+
+auth ..> validation : uses
+users ..> validation : uses
+trips ..> validation : uses
+bookings ..> validation : uses
+
+' Entity usage
+users --> userEntity : uses
+trips --> tripEntity : uses
+bookings --> bookingEntity : uses
+files --> fileEntity : uses
+
+' Repository usage
+userEntity --> userRepo : uses
+tripEntity --> tripRepo : uses
+bookingEntity --> bookingRepo : uses
+fileEntity --> fileRepo : uses
+
+' Data access
+userRepo --> db : SQL
+tripRepo --> db : SQL
+bookingRepo --> db : SQL
+fileRepo --> db : SQL
+
+files --> storage : File I/O
+
+@enduml
