@@ -1,40 +1,131 @@
 {
-    "database": {
-        "1764389250618": {
-            "host": "127.0.0.1",
-            "port": 5432,
-            "user": "obet",
-            "password": "dbclient_a$Aegk7laPCJS/BYLQJvdI7w==",
-            "dbType": "PostgreSQL",
-            "database": "postgres",
-            "name": "hono-crash-course",
-            "advance": {
-                "idleConfig": {
-                    "enable": true
-                },
-                "hideSystemSchema": true,
-                "groupingTables": false,
-                "loadMetaDataWhenExpandTreeView": true
-            },
-            "treeFeatures": [],
-            "usingSSH": false,
-            "useSocksProxy": false,
-            "useHTTPProxy": false,
-            "global": false,
-            "remark": "Dev",
-            "color": "charts.red",
-            "savePassword": "Forever",
-            "readonly": false,
-            "sort": 11,
-            "group": "dev",
-            "useSSL": false,
-            "fs": {
-                "encoding": "utf8",
-                "showHidden": true
-            },
-            "key": "1764389250618",
-            "connectionKey": "database.connections"
-        }
-    },
-    "$schema": "https://cdn.database-client.com/dbclient/schema.json"
+  "database": {
+    "1764389250618": {
+      "host": "postgres",
+      "port": 5432,
+      "user": "devuser",
+      "password": "dbclient_a$hS896ODfFE+bD0jxX63geA==",
+      "dbType": "PostgreSQL",
+      "database": "postgres",
+      "name": "hono-crash-course",
+      "advance": {
+        "idleConfig": {
+          "enable": true
+        },
+        "hideSystemSchema": true,
+        "groupingTables": false,
+        "loadMetaDataWhenExpandTreeView": true
+      },
+      "treeFeatures": [],
+      "usingSSH": false,
+      "useSocksProxy": false,
+      "useHTTPProxy": false,
+      "global": false,
+      "remark": "Dev",
+      "color": "charts.red",
+      "savePassword": "Forever",
+      "readonly": false,
+      "sort": 11,
+      "group": "dev",
+      "useSSL": false,
+      "fs": {
+        "encoding": "utf8",
+        "showHidden": true
+      },
+      "key": "1764389250618",
+      "connectionKey": "database.connections"
+    }
+  },
+  "$schema": "https://cdn.database-client.com/dbclient/schema.json",
+  "nosql": {
+    "1764486446663": {
+      "host": "redis",
+      "port": 6379,
+      "password": "dbclient_a$hS896ODfFE+bD0jxX63geA==",
+      "dbType": "Redis",
+      "database": "0",
+      "name": "hono-crash-course",
+      "advance": {
+        "idleConfig": {
+          "enable": true
+        },
+        "hideSystemSchema": true,
+        "groupingTables": false,
+        "loadMetaDataWhenExpandTreeView": true
+      },
+      "treeFeatures": [],
+      "usingSSH": false,
+      "useSocksProxy": false,
+      "useHTTPProxy": false,
+      "ssh": {
+        "host": "",
+        "port": 22,
+        "username": "root",
+        "type": "auto",
+        "privateKeyPath": "",
+        "serverType": "linux",
+        "connectTimeout": 5000,
+        "algorithms": {
+          "kex": [
+            "ecdh-sha2-nistp256",
+            "ecdh-sha2-nistp384",
+            "ecdh-sha2-nistp521",
+            "diffie-hellman-group-exchange-sha256",
+            "diffie-hellman-group14-sha256",
+            "diffie-hellman-group15-sha512",
+            "diffie-hellman-group16-sha512",
+            "diffie-hellman-group17-sha512",
+            "diffie-hellman-group18-sha512",
+            "diffie-hellman-group14-sha1",
+            "diffie-hellman-group-exchange-sha1"
+          ],
+          "cipher": [
+            "aes128-gcm@openssh.com",
+            "aes256-gcm@openssh.com",
+            "aes128-ctr",
+            "aes192-ctr",
+            "aes256-ctr"
+          ],
+          "serverHostKey": [
+            "ssh-ed25519",
+            "ecdsa-sha2-nistp256",
+            "ecdsa-sha2-nistp384",
+            "ecdsa-sha2-nistp521",
+            "rsa-sha2-512",
+            "rsa-sha2-256",
+            "ssh-rsa",
+            "ssh-dss"
+          ]
+        },
+        "disableSFTP": false,
+        "pruneSFTPRoot": true
+      },
+      "socksProxy": {
+        "host": null,
+        "port": 1080,
+        "type": 5
+      },
+      "httpProxy": {
+        "host": null,
+        "port": 3128
+      },
+      "global": false,
+      "savePassword": "Forever",
+      "readonly": false,
+      "sort": 11,
+      "group": "dev",
+      "useSSL": false,
+      "fs": {
+        "encoding": "utf8",
+        "showHidden": true
+      },
+      "redis": {},
+      "httpAuth": {
+        "authType": "none",
+        "url": "http://127.0.0.1:9200"
+      },
+      "key": "1764486446663",
+      "connectionKey": "nosql.connections"
+    }
+  }
 }

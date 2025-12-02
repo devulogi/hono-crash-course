@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ../..:/workspaces:cached
+      - /var/run/docker.sock:/var/run/docker.sock
+    working_dir: /workspaces/hono-crash-course
+    command: sleep infinity
+    env_file:
+      - .env.devcontainer
+    environment:
+      - PGHOST=postgres
+      - PGPORT=5432
+      - PGUSER=${DB_USER:-devuser}
+      - PGPASSWORD=${DB_PASSWORD:-devpass123}
+      - PGDATABASE=postgres
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_USERNAME=${REDIS_USER:-devuser}
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-devpass123}
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    env_file:
+      - .env.devcontainer
+    environment:
+      POSTGRES_USER: ${DB_USER:-devuser}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-devpass123}
+      POSTGRES_DB: postgres
+      POSTGRES_INITDB_ARGS: "--auth-host=md5"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - '5433:5432'
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    env_file:
+      - .env.devcontainer
+    command: redis-server --requirepass ${REDIS_PASSWORD:-devpass123}
+    volumes:
+      - redis-data:/data
+    ports:
+      - '6379:6379'
+
+volumes:
+  postgres-data:
+  redis-data:
