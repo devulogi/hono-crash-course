@@ -5,16 +5,19 @@ import { UserType, UserRole } from "../user-domain.types";
 export class User {
   private readonly id: UUID;
   private role: UserRole;
+  private passwordHash?: string;
   
   constructor(
     private name: string,
     private email: string,
-    role: UserRole = UserRole.USER
+    role: UserRole = UserRole.USER,
+    passwordHash?: string
   ) {
     this.id = randomUUID();
     this.name = name;
     this.email = email;
     this.role = role;
+    this.passwordHash = passwordHash;
   }
 
   private isValidEmail(email: string): boolean {
@@ -48,6 +51,14 @@ export class User {
 
   isStaff(): boolean {
     return this.role === UserRole.STAFF || this.role === UserRole.ADMIN;
+  }
+
+  getPasswordHash(): string | undefined {
+    return this.passwordHash;
+  }
+
+  setPasswordHash(hash: string): void {
+    this.passwordHash = hash;
   }
 
   setName(name: string): void {

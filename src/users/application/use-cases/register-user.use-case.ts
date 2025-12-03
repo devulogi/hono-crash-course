@@ -6,7 +6,7 @@ export class RegisterUserUseCase {
   constructor(private userRepository: UserRepositoryPort) {}
 
   async execute(userData: CreateUserData): Promise<User> {
-    const { name, email, password, role = UserRole.CUSTOMER } = userData;
+    const { name, email, password, role = UserRole.USER } = userData;
 
     // Check if user already exists
     const existingUser = await this.userRepository.findByEmail(email);
@@ -14,11 +14,12 @@ export class RegisterUserUseCase {
       throw new Error('User with this email already exists');
     }
 
-    // Hash password (simplified - should use proper hashing)
-    const password_hash = await this.hashPassword(password);
-
     // Create user
-    const user = new User(name, email, password_hash, role);
+    const user = new User(name, email, role);
+    
+    // Hash and set password
+    const password_hash = await this.hashPassword(password);
+    user.setPasswordHash(password_hash);
 
     // Save user
     await this.userRepository.save(user);
