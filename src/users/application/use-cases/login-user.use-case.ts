@@ -19,7 +19,12 @@ export class LoginUserUseCase {
     }
 
     // Verify password
-    const isValidPassword = await this.verifyPassword(password, user.getPasswordHash());
+    const passwordHash = user.getPasswordHash();
+    if (!passwordHash) {
+      throw new Error('Invalid credentials');
+    }
+    
+    const isValidPassword = await this.verifyPassword(password, passwordHash);
     if (!isValidPassword) {
       throw new Error('Invalid credentials');
     }
