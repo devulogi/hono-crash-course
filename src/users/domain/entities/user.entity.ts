@@ -1,16 +1,20 @@
 import { randomUUID, UUID } from "crypto";
 
-import { UserType } from "../user-domain.types";
+import { UserType, UserRole } from "../user-domain.types";
 
-class User {
+export class User {
   private readonly id: UUID;
+  private role: UserRole;
+  
   constructor(
     private name: string,
     private email: string,
+    role: UserRole = UserRole.USER
   ) {
     this.id = randomUUID();
     this.name = name;
     this.email = email;
+    this.role = role;
   }
 
   private isValidEmail(email: string): boolean {
@@ -30,6 +34,22 @@ class User {
     return this.email;
   }
 
+  getRole(): UserRole {
+    return this.role;
+  }
+
+  setRole(role: UserRole): void {
+    this.role = role;
+  }
+
+  isAdmin(): boolean {
+    return this.role === UserRole.ADMIN;
+  }
+
+  isStaff(): boolean {
+    return this.role === UserRole.STAFF || this.role === UserRole.ADMIN;
+  }
+
   setName(name: string): void {
     this.name = name;
   }
@@ -46,6 +66,7 @@ class User {
       id: this.id,
       name: this.name,
       email: this.email,
+      role: this.role,
     };
   }
 }
