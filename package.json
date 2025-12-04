@@ -10,7 +10,9 @@
     "start": "tsx src/main.ts",
     "build": "tsc",
     "docs:generate": "tsx scripts/generate-docs.ts",
-    "test": "echo 'No tests defined yet' && exit 0"
+    "test": "echo 'No tests defined yet' && exit 0",
+    "install:clean": "rm -rf node_modules pnpm-lock.yaml && pnpm install",
+    "check:deps": "pnpm audit && pnpm outdated"
   },
   "dependencies": {
     "@hono/node-server": "^1.19.0",

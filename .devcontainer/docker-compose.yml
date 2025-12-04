@@ -8,6 +8,7 @@ services:
     volumes:
       - ../..:/workspaces:cached
       - /var/run/docker.sock:/var/run/docker.sock
+      - pnpm-store:/workspaces/.pnpm-store:cached
     working_dir: /workspaces/hono-crash-course
     command: sleep infinity
     env_file:
@@ -22,6 +23,9 @@ services:
       - REDIS_PORT=6379
       - REDIS_USERNAME=${REDIS_USER:-devuser}
       - REDIS_PASSWORD=${REDIS_PASSWORD:-devpass123}
+      - PNPM_HOME=/usr/local/bin
+      - NPM_CONFIG_CACHE=/workspaces/.npm-cache
+      - PNPM_STORE_DIR=/workspaces/.pnpm-store
     depends_on:
       - postgres
       - redis
@@ -55,3 +59,4 @@ services:
 volumes:
   postgres-data:
   redis-data:
+  pnpm-store:

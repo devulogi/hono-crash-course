@@ -4,7 +4,7 @@
   "service": "app",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
   "shutdownAction": "stopCompose",
-  "postCreateCommand": "sudo chown -R $(whoami):$(whoami) /workspaces && npm install",
+  "postCreateCommand": "sudo chown -R $(whoami):$(whoami) /workspaces && pnpm install",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -37,7 +37,20 @@
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "plantuml.server": "https://www.plantuml.com/plantuml",
-        "plantuml.render": "PlantUMLServer"
+        "plantuml.render": "PlantUMLServer",
+        "npm.packageManager": "pnpm",
+        "terminal.integrated.env.linux": {
+          "PNPM_HOME": "/usr/local/bin"
+        },
+        "files.exclude": {
+          "**/node_modules": true,
+          "**/.pnpm-store": true
+        },
+        "search.exclude": {
+          "**/node_modules": true,
+          "**/.pnpm-store": true,
+          "**/pnpm-lock.yaml": true
+        }
       }
     }
   },
